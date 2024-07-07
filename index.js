@@ -42,7 +42,7 @@ async function deleteData() {
             alert('Fehler beim Löschen der Daten.');
         }
     } catch (error) {
-        console.error('Error deleting data:', error);
+        console.error('Fehler beim Löschen der Daten:', error);
         alert('Fehler beim Löschen der Daten.');
     }
 }
