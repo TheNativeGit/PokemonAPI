@@ -11,7 +11,6 @@ app.get('/load-data', async (req, res) => {
     let input = req.query.pokemon;
     let pokemonName= input.toLowerCase();
     let link = "https://pokeapi.co/api/v2/pokemon/" + pokemonName;
-    console.log("Link: " + link);
 
     try {
         const response = await fetch(link);
@@ -48,16 +47,16 @@ app.get('/load-data', async (req, res) => {
         
         db.run(createTableQuery, (err) => {
             if (err) {
-                console.error('Error creating table:', err);
-                return res.status(500).send('Error creating table');
+                console.error('Fehler beim Erstellen der Tabelle:', err);
+                return res.status(500).send('Fehler beim Erstellen der Tabelle');
             }
         
             // insert into db
             const insertQuery = `INSERT INTO pokemonoverview (id, name, weight, height, base_experience, type, abilities, forms, held_items) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             db.run(insertQuery, [pokemonData.id, pokemonData.name, pokemonData.weight, pokemonData.height, pokemonData.base_experience, pokemonData.type, pokemonData.abilities, pokemonData.forms, pokemonData.held_items], (err) => {
                 if (err) {
-                    console.error('Error inserting data:', err);
-                    return res.status(500).send('Error inserting data');
+                    console.error('Fehler beim Einfügen der Daten in die Tabelle:', err);
+                    return res.status(500).send('Fehler beim Einfügen der Daten in die Tabelle');
                 }
                 console.log('Pokémon-Daten erfolgreich gespeichert!');
                 db.close();
@@ -65,16 +64,16 @@ app.get('/load-data', async (req, res) => {
             });
         });
     } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).send('Error fetching data');
+        console.error('Fehler beim Abrufen der Daten:', error);
+        res.status(500).send('Fehler beim Abrufen der Daten');
     }
 });
 
 app.get('/get-data', (req, res) => {
     const db = new sqlite3.Database('SQLiteDB.db', (err) => {
         if (err) {
-            console.error('Error opening database', err);
-            return res.status(500).send('Error opening database');
+            console.error('Fehler beim Öffnen der Datenbank:', err);
+            return res.status(500).send('Fehler beim Öffnen der Datenbank');
         }
     });
 
@@ -82,14 +81,14 @@ app.get('/get-data', (req, res) => {
 
     db.all(selectQuery, [], (err, rows) => {
         if (err) {
-            console.error('Error fetching data', err);
-            return res.status(500).send('Error fetching data');
+            console.error('Fehler beim Abrufen der Daten', err);
+            return res.status(500).send('Fehler beim Abrufen der Daten');
         }
         res.json(rows);
         db.close((err) => {
             if (err) {
-                console.error('Error closing database', err);
-                return res.status(500).send('Error closing database');
+                console.error('Fehler beim Schließen der DAtenbank', err);
+                return res.status(500).send('Fehler beim Schließen der Datenbank');
             }
         });
     });
@@ -102,8 +101,8 @@ app.get('/delete-data', (req, res) => {
     
     db.run(deleteQuery, (err) => {
         if (err) {
-            console.error('Error deleting data:', err);
-            return res.status(500).send('Error deleting data');
+            console.error('Fehler beim Löschen der Daten:', err);
+            return res.status(500).send('Fehler beim Löschen der Daten');
         }
         console.log('Pokémon-Daten erfolgreich gelöscht!');
         db.close();
